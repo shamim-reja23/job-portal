@@ -1,40 +1,42 @@
 import express from "express";
-import dotenv from "dotenv";
-import { connectDb } from "./db/connectDb.js";
-import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
-import cors from "cors";  // Import cors
-import path from "path";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./utils/db.js";
+import userRoute from "./routes/user.route.js"
 
-dotenv.config();
+dotenv.config({});
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve();
-
-const origin = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
 
 
-// CORS configuration
-app.use(cors({
-    origin: origin, // Replace with your frontend URL
-    credentials: true, // Allow credentials (cookies, authorization headers)
-}));
+//middleware
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
 
-app.use(express.json()); // Allows input from req.body
-app.use(cookieParser()); // Parses incoming cookies
-
-app.use("/api/auth", authRoutes);
-
-if (process.env.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "/frontend/build")));
-
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
-	});
+const corsOptions ={
+    origin : 'http://localhost:5173',
+    credentials: true
 }
+app.use(cors(corsOptions));
 
-app.listen(PORT, () => {
-    connectDb();
-    console.log("Server is running on port:", PORT);
-});
+const PORT = process.env.PORT ||  3000;
+
+//routes
+app.use("/api/v1/user", userRoute)
+
+//global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    return res.status(500).json({
+        success: false,
+        message: "Something went wrong"
+    })
+})
+
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    })
+})
