@@ -5,10 +5,11 @@ import isAuthenticated from "../middleware/isAuthenticated.js"
 
 const router = express.Router()
 
-router.post("/register", register)
-router.post("/login", login)
-router.post("/logout", logout)
-router.put("/profile/update", isAuthenticated, updateProfile)
+router.post("/auth/register", register)
+router.post("/auth/login", login)
+router.post("/auth/logout", isAuthenticated, logout)
+
+router.put("/profile", isAuthenticated, updateProfile)
 
 
 
