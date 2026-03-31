@@ -1,6 +1,7 @@
 import { Company } from "../models/company.model.js"
 import { Job } from "../models/job.model.js"
 
+// for reqruiter
 export const postJob = async (req, res) => {
     try {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body
@@ -51,6 +52,7 @@ export const postJob = async (req, res) => {
     }
 }
 
+// for job seekers
 export const getAllJobs = async(req, res) => {
      try {
         const keyword = req.query.keyword || ""
@@ -63,7 +65,7 @@ export const getAllJobs = async(req, res) => {
             ]
         }
 
-        const jobs = await Job.find(query).populate("company");
+        const jobs = await Job.find(query).populate("company").sort({ createdAt: -1 });
         if(jobs.length === 0){
             return res.status(404).json({
                 success: false,
@@ -82,4 +84,56 @@ export const getAllJobs = async(req, res) => {
             message: "Internal server error"
         })
      }
+}
+
+export const getJobById = async(req, res) => {
+    try {
+        const jobId = req.params.id
+        const job = await Job.findById(jobId).populate("company");
+
+        if(!job) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            job
+        })
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
+}
+
+export const getMyJobs = async(req, res) => {
+    try {
+        const userId = req.id
+
+        const jobs = await Job.find({ created_by: userId }).populate("company")
+        if(jobs.length === 0){
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            jobs
+        })
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
 }
