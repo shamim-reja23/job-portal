@@ -130,7 +130,18 @@ export const getApplicants = async (req, res) => {
 
 export const updateStatus = async (req, res) => {
     try {
-        const { status } = req.body
+        const { status } = req.body;
+        const applicationId = req.params.id
+
+        if(!status){
+            return res.status(401).json({
+                success: false,
+                message: "status is required"
+            })
+        }
+
+        const application = await Application.findOne({ _id: applicationId })
+        
     } catch (error) {
         console.error(error)
         return res.status(500).json({
