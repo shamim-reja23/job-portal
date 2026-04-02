@@ -3,7 +3,7 @@ import { Job } from "../models/job.model.js"
 
 export const applyJob = async(req, res) => {
     try {
-        const userId = req.id 
+        const userId = req.user.userId
         const jobId = req.params.id
 
         if(req.user.role !== 'student'){
@@ -61,7 +61,7 @@ export const applyJob = async(req, res) => {
 
 export const getAppliedJobs = async(req, res) => {
     try {
-        const userId = req.id
+        const userId = req.user.userId
 
         const applications = await Application.find({ applicant: userId }).sort({ createdAt: -1}).populate({
             path: "job",
@@ -98,7 +98,7 @@ export const getApplicants = async (req, res) => {
 
         const job = await Job.findOne({
             _id: jobId,
-            created_by: req.id
+            created_by: req.user.userId
         }).populate({
             path: 'applications',
             options: { sort: { createdAt: -1 } },
@@ -140,8 +140,31 @@ export const updateStatus = async (req, res) => {
             })
         }
 
-        const application = await Application.findOne({ _id: applicationId })
-        
+        const application = await Application.findById(applicationId).populate("job");
+
+        if(!application || application.job.created_by.toString() !== req.user.userId){
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized"
+            })
+        }
+
+        const validStatus = ["pending", "accepted", "rejected"]
+
+        if(!validStatus.includes(status.toLowerCase())){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid status"
+            })
+        }
+
+        application.status = status.toLowerCase();
+        await application.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Status updated successfully."
+        })
     } catch (error) {
         console.error(error)
         return res.status(500).json({

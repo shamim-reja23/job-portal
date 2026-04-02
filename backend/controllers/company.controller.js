@@ -15,7 +15,7 @@ export const registerCompany = async (req, res) => {
         const escapedName = companyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         let company = await Company.findOne({ 
             name: { $regex: `^${escapedName}$`, $options: "i" }, 
-            userId: req.id 
+            userId: req.user.userId
         })
 
         if(company){
@@ -27,7 +27,7 @@ export const registerCompany = async (req, res) => {
 
         company = await Company.create({
             name: companyName,
-            userId: req.id
+            userId: req.user.userId
         })
 
         return res.status(201).json({
@@ -46,7 +46,7 @@ export const registerCompany = async (req, res) => {
 
 export const getCompany = async(req, res) => {
     try {
-        const userId = req.id
+        const userId = req.user.userId
         const companies = await Company.find({ userId })
 
         if(!companies){
@@ -75,7 +75,7 @@ export const getCompanyById = async(req, res) => {
         const companyId = req.params.id
         const company = await Company.findOne({
             _id: companyId,
-            userId: req.id
+            userId: req.user.userId
         })
 
         if(!company){
@@ -115,7 +115,7 @@ export const updateCompany = async(req, res) => {
         if(location) updateData.location = location;
 
         const company = await Company.findOneAndUpdate(
-            { _id: companyId, userId: req.id },
+            { _id: companyId, userId: req.user.userId },
             updateData,
             { new: true }
         )
