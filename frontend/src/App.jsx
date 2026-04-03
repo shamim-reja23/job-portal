@@ -1,19 +1,11 @@
-import { useState } from 'react'
-import { Button } from './components/ui/button'
+import Navbar from "./components/shared/Navbar.jsx"
 
 function App() {
 
   return (
     <>
-      <section id="center" className='text-red-600 font-extrabold'>
-        Hello World
-        <Button>
-          Click me
-        </Button>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <Navbar/>
+   
     </>
   )
 }
