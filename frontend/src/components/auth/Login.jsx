@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -8,23 +8,53 @@ import { Link } from "react-router-dom";
 
 
 const Login = () => {
+  const [ input, setInput ] = useState({
+    email: "",
+    password: "",
+    role: "",
+  })
+
+  const changeEventHandler = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value })
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(input);
+    
+  }
+
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
-          action=""
+          onSubmit={submitHandler}
           className="w-1/2 border border-gray-200 rounded-md p-5 my-10"
         >
           <h1 className="font-bold text-xl mb-5">Login</h1>
           <div className="my-2">
             <Label>Email</Label>
-            <Input type="email" value="" placeholder="shamim@gmail.com" className="mt-2" />
+            <Input 
+              type="email"  
+              value={input.email} 
+              name="email"
+              onChange={changeEventHandler}
+              placeholder="example@gmail.com" 
+              className="mt-2" 
+            />
           </div>
           
           <div className="my-2">
             <Label>Password</Label>
-            <Input type="password" value="" placeholder="*****" className="mt-2"/>
+            <Input 
+              type="password" 
+              value={input.password}
+              name="password" 
+              onChange={changeEventHandler}
+              placeholder="*****" 
+              className="mt-2"
+            />
           </div>
           <div className="flex items-center justify-between my-2">
             <RadioGroup className="flex items-center gap-4 my-5">
@@ -33,7 +63,8 @@ const Login = () => {
                   type="radio" 
                   name="role" 
                   value="student" 
-                  id="student" 
+                  checked={input.role === 'student'}
+                  onChange={changeEventHandler}
                   className="cursor-pointer"
                 />
                 <Label htmlFor="student">Student</Label>
@@ -43,7 +74,8 @@ const Login = () => {
                   type="radio"
                   name="role"
                   value="recruiter" 
-                  id="recruiter" 
+                  checked={input.role === 'recruiter'}
+                  onChange={changeEventHandler}
                   className="cursor-pointer"  
                 />
                 <Label htmlFor="recruiter">Recruiter</Label>

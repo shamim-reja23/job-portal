@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -7,30 +7,81 @@ import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
+
+  const [ input, setInput ] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    role: "",
+    file: ""
+  })
+
+  const changeEventHandler = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value })
+  }
+  const changeFileHandler = (e) => {
+    setInput({ ...input, file: e.target.files?.[0] })
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(input);
+    
+  }
+
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
-          action=""
+          onSubmit={submitHandler}
           className="w-1/2 border border-gray-200 rounded-md p-5 my-10"
         >
           <h1 className="font-bold text-xl mb-5">Sign Up</h1>
           <div className="my-2">
             <Label>Full Name</Label>
-            <Input type="text" value="" placeholder="Shamim" className="mt-2" />
+            <Input 
+              type="text" 
+              value={input.fullName} 
+              name="fullName"
+              onChange={changeEventHandler}
+              placeholder="example" 
+              className="mt-2" 
+            />
           </div>
           <div className="my-2">
             <Label>Email</Label>
-            <Input type="email" value="" placeholder="shamim@gmail.com" className="mt-2" />
+            <Input 
+              type="email"  
+              value={input.email} 
+              name="email"
+              onChange={changeEventHandler}
+              placeholder="example@gmail.com" 
+              className="mt-2" 
+            />
           </div>
           <div className="my-2">
             <Label>Phone Number</Label>
-            <Input type="number" value="" placeholder="9876543210" className="mt-2"/>
+            <Input 
+              type="number" 
+              value={input.phoneNumber} 
+              name="phoneNumber"
+              onChange={changeEventHandler}
+              placeholder="9876543210" 
+              className="mt-2"
+            />
           </div>
           <div className="my-2">
             <Label>Password</Label>
-            <Input type="password" value="" placeholder="*****" className="mt-2"/>
+            <Input 
+              type="password" 
+              value={input.password}
+              name="password" 
+              onChange={changeEventHandler}
+              placeholder="*****" 
+              className="mt-2"
+            />
           </div>
           <div className="flex items-center justify-between my-2">
             <RadioGroup className="flex items-center gap-4 my-5">
@@ -39,7 +90,8 @@ const Signup = () => {
                   type="radio" 
                   name="role" 
                   value="student" 
-                  id="student" 
+                  checked={input.role === 'student'}
+                  onChange={changeEventHandler}
                   className="cursor-pointer"
                 />
                 <Label htmlFor="student">Student</Label>
@@ -49,7 +101,8 @@ const Signup = () => {
                   type="radio"
                   name="role"
                   value="recruiter" 
-                  id="recruiter" 
+                  checked={input.role === 'recruiter'}
+                  onChange={changeEventHandler}
                   className="cursor-pointer"  
                 />
                 <Label htmlFor="recruiter">Recruiter</Label>
@@ -57,7 +110,12 @@ const Signup = () => {
             </RadioGroup>
             <div className="flex items-center gap-2">
               <Label>Profile</Label>
-              <Input accept="image/*" type="file" className="cursor-pointer"/>
+              <Input 
+                accept="image/*" 
+                type="file" 
+                onChange={changeFileHandler}
+                className="cursor-pointer"
+              />
             </div>
           </div>
           <Button type="submit" className="w-full my-4">Signup</Button>
