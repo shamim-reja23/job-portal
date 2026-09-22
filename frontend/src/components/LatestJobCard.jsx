@@ -1,25 +1,25 @@
 import React from 'react'
-import { Badge } from './ui/badge'
+import { Badge } from './ui/badge.jsx'
 
 const LatestJobCard = () => {
   return (
-    <div>
+    <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100 cursor-pointer'>
         <div>
-            <h1>Company Name</h1>
-            <p>India</p>
+            <h1 className='font-medium text-lg'>Company Name</h1>
+            <p className='text-sm text-gray-500'>India</p>
         </div>
         <div>
-            <h1>Job Title</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, non!</p>
+            <h1 className='font-bold text-lg my-2'>Job Title</h1>
+            <p className='text-sm text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, non! Lorem ipsum dolor sit amet.</p>
         </div>
-        <div>
-            <Badge className='text-blue-700 text-bold' variant='outline'>12 Positions</Badge>
-            <Badge className='text-red-800 text-bold' variant='outline'>Part Time</Badge>
-            <Badge className='text-red-900 text-bold' variant='outline'>12 LPA</Badge>
+        <div className='flex items-center gap-2 mt-4'>
+            <Badge className={'text-blue-700 font-bold'} variant='outline'>12 Positions</Badge>
+            <Badge className={'text-red-700 font-bold'} variant='outline'>Part Time</Badge>
+            <Badge className={'text-purple-700 font-bold'} variant='outline'>12LPA</Badge>
 
         </div>
     </div>
   )
 }
 
-export default LatestJobCard
+export default LatestJobCard;
