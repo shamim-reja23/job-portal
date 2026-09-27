@@ -4,9 +4,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.jsx";
 import { Avatar, AvatarImage } from "../ui/avatar.jsx";
 import { Button } from "../ui/button.jsx";
 import { LogOut, User2 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 function Navbar() {
-  const user = false;
+  const {user} = useSelector(store => store.auth);
 
   return (
     <div className="bg-white">
