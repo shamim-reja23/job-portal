@@ -33,8 +33,8 @@ export const JobCard = () => {
             <Badge className={'text-purple-700 font-bold'} variant='outline'>12LPA</Badge>
         </div>
         <div className='flex items-center gap-4 mt-4'>
-            <Button variant='outline' className="p-4">Details</Button>
-            <Button className="bg-[#6a38c2] hover:bg-[#5b30a6] p-4">Apply Now</Button>
+            <Button variant='outline' className="p-4 cursor-pointer">Details</Button>
+            <Button className="bg-[#6a38c2] hover:bg-[#5b30a6] p-4 cursor-pointer">Apply Now</Button>
         </div>
     </div>
   )
