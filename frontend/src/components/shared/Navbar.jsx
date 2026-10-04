@@ -63,9 +63,9 @@ function Navbar() {
                     <AvatarImage src="https://github.com/shadcn.png" />
                   </Avatar>
                   <div>
-                    <h4 className="font-medium">Ahmed Ahemd</h4>
+                    <h4 className="font-medium">{user?.fullName}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Lorem ipsum dolor sit amet.
+                      {user?.profile?.bio}
                     </p>
                   </div>
                 </div>

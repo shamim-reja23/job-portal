@@ -8,9 +8,9 @@ const router = express.Router()
 
 router.post("/auth/register", singleUpload, register)
 router.post("/auth/login", login)
-router.post("/auth/logout", isAuthenticated, logout)
+router.post("/auth/logout", logout)
 
-router.put("/profile/update", isAuthenticated, updateProfile)
+router.put("/profile/update", isAuthenticated, singleUpload, updateProfile)
 
 
 
