@@ -8,6 +8,7 @@ import { Label } from "./ui/label";
 import { Link } from "react-router-dom";
 import AppliedJobsTable from "./AppliedJobsTable";
 import UpdateProfile from "./UpdateProfile";
+import { useSelector } from "react-redux";
 
 const skills = ["Skill 1", "Skill 2", "Skill 3"]
 
@@ -15,6 +16,9 @@ const Profile = () => {
   const isResume = true;
 
   const [ open, setOpen ] = useState(false);
+  const { user } = useSelector(store => store.auth);
+
+  
 
   return (
     <div>

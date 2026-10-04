@@ -10,7 +10,7 @@ router.post("/auth/register", singleUpload, register)
 router.post("/auth/login", login)
 router.post("/auth/logout", isAuthenticated, logout)
 
-router.put("/profile", isAuthenticated, updateProfile)
+router.put("/profile/update", isAuthenticated, updateProfile)
 
 
 
