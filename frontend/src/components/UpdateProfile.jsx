@@ -42,6 +42,7 @@ const UpdateProfile = ({ open, setOpen }) => {
     formData.append("number", input.phoneNumber)
     formData.append("bio", input.bio);
     formData.append("skills", input.skills);
+    
     if(input.file){
       formData.append("file", input.file)
     }
@@ -54,14 +55,17 @@ const UpdateProfile = ({ open, setOpen }) => {
         },
         withCredentials: true
       });
+
       if(res.data.success){
         dispatch(setUser(res.data.user))
         toast.success(res.data.message)
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error);
       toast.error(error.response.data.message)
-    } finally{
+    } 
+    finally{
       setLoading(false)
     }
     setOpen(false);
