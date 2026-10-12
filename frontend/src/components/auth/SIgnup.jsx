@@ -19,7 +19,6 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     role: "",
-    file: "",
   });
   const { loading } = useSelector((store) => store.auth);
   const navigate = useNavigate();
@@ -28,9 +27,7 @@ const Signup = () => {
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  const changeFileHandler = (e) => {
-    setInput({ ...input, file: e.target.files?.[0] });
-  };
+ 
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -41,9 +38,6 @@ const Signup = () => {
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("password", input.password);
     formData.append("role", input.role);
-    if (input.file) {
-      formData.append("file", input.file);
-    }
     try {
       dispatch(setLoading(true));
       const res = await axios.post(
@@ -146,15 +140,7 @@ const Signup = () => {
                 <Label htmlFor="recruiter">Recruiter</Label>
               </div>
             </RadioGroup>
-            <div className="flex items-center gap-2">
-              <Label>Profile</Label>
-              <Input
-                accept="image/*"
-                type="file"
-                onChange={changeFileHandler}
-                className="cursor-pointer"
-              />
-            </div>
+            
           </div>
           {loading ? (
             <Button className="w-full my-4">

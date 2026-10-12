@@ -20,7 +20,9 @@ const UpdateProfile = ({ open, setOpen }) => {
     phoneNumber: user?.phoneNumber || "",
     bio: user?.profile?.bio || "",
     skills: user?.profile?.skills?.map(skill => skill) || "",
-    resume: user?.profile?.resume || ""
+    resume: null,
+    profilePhoto: null,
+
   })
 
   const dispatch = useDispatch();
@@ -30,8 +32,9 @@ const UpdateProfile = ({ open, setOpen }) => {
   }
 
   const fileHandler = (e) => {
-    const file = e.target.files?.[0];
-    setInput({ ...input, file })
+    // const file = e.target.files?.[0];
+    // setInput({ ...input, file })
+    setInput({ ...input, [e.target.name]: e.target.files[0] });
   }
 
   const submitHandler = async (e) => {
@@ -86,6 +89,17 @@ const UpdateProfile = ({ open, setOpen }) => {
 
           <form onSubmit={submitHandler}>
             <div className="grid gap-4 py-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label>Profile</Label>
+                <Input
+                  accept="image/*"
+                  type="file"
+                  id="profilePhoto"
+                  name="profilePhoto"
+                  onChange={fileHandler}
+                  className="cursor-pointer col-span-3"
+                />
+              </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name

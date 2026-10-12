@@ -141,6 +141,8 @@ export const logout = async(req, res) => {
 export const updateProfile = async(req, res) => {
     try {
         const { fullName, email, phoneNumber, bio, skills } = req.body;
+
+        const profilePhoto = req
         const file = req.file;
         const fileUri = getDatauri(file);
         const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
