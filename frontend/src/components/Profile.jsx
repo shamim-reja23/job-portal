@@ -5,12 +5,11 @@ import { Button } from "./ui/button";
 import { Contact, Mail, Pen } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
-import { Link } from "react-router-dom";
 import AppliedJobsTable from "./AppliedJobsTable";
 import UpdateProfile from "./UpdateProfile";
 import { useSelector } from "react-redux";
 
-const skills = ["Skill 1", "Skill 2", "Skill 3"]
+const defaultProfile = "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/company-logo-design-template-e089327a5c476ce5c70c74f7359c5898_screen.jpg?ts=1672291305";
 
 const Profile = () => {
   const isResume = true;
@@ -27,7 +26,7 @@ const Profile = () => {
         <div className="flex justify-between ">
           <div className="flex items-center gap-4">
             <Avatar className="h-24 w-24">
-              <AvatarImage src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/company-logo-design-template-e089327a5c476ce5c70c74f7359c5898_screen.jpg?ts=1672291305" />
+              <AvatarImage src={user?.profile?.profilePhoto || defaultProfile} />
             </Avatar>
             <div>
               <h1 className="font-medium text-xl">{user?.fullName}</h1>

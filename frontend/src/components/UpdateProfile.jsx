@@ -20,8 +20,8 @@ const UpdateProfile = ({ open, setOpen }) => {
     phoneNumber: user?.phoneNumber || "",
     bio: user?.profile?.bio || "",
     skills: user?.profile?.skills?.map(skill => skill) || "",
-    resume: null,
-    profilePhoto: null,
+    resume: user?.profile?.resume || "",
+    profilePhoto: user?.profile?.profilePhoto || ""
 
   })
 
@@ -50,6 +50,10 @@ const UpdateProfile = ({ open, setOpen }) => {
       formData.append("file", input.file)
     }
 
+    if(input.profilePhoto){
+      formData.append("profilePhoto", input.profilePhoto)
+    }
+
     try {
       setLoading(true)
       const res = await axios.put(`${USER_API_END_POINT}/profile/update`, formData, {
@@ -66,7 +70,7 @@ const UpdateProfile = ({ open, setOpen }) => {
     } 
     catch (error) {
       console.log(error);
-      toast.error(error.response.data.message)
+      toast.error(error.response?.data?.message || "Something went wrong");
     } 
     finally{
       setLoading(false)
@@ -90,7 +94,7 @@ const UpdateProfile = ({ open, setOpen }) => {
           <form onSubmit={submitHandler}>
             <div className="grid gap-4 py-4 ">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label>Profile</Label>
+                <Label htmlFor="profilePhoto">Profile Photo</Label>
                 <Input
                   accept="image/*"
                   type="file"

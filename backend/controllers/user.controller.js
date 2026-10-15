@@ -141,12 +141,6 @@ export const logout = async(req, res) => {
 export const updateProfile = async(req, res) => {
     try {
         const { fullName, email, phoneNumber, bio, skills } = req.body;
-
-        const profilePhoto = req
-        const file = req.file;
-        const fileUri = getDatauri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-
         const userId = req.id; // middleware authentication
         let user = await User.findById(userId)
 
@@ -157,22 +151,34 @@ export const updateProfile = async(req, res) => {
             })
         }
 
+        if(!user.profile) user.profile = {}
+
+        if(req.files && req.files['file']){
+            const resumeFile = req.files['file'][0];
+            const fileUri = getDatauri(resumeFile);
+            const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+            user.profile.resume = cloudResponse.secure_url;
+            user.profile.resumeOriginalName = resumeFile.originalname;
+        }
+
+        if(req.files && req.files['profilePhoto']){
+            const photoFile = req.files['profilePhoto'][0];
+            const fileUri = getDatauri(photoFile);
+            const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+            
+            user.profile.profilePhoto = cloudResponse.secure_url;
+        }
+
+        
         if(fullName) user.fullName = fullName
         if(email) user.email = email
         if(phoneNumber) user.phoneNumber = phoneNumber
 
-        if(!user.profile) user.profile = {}
         if(bio) user.profile.bio = bio
         if(skills){
             user.profile.skills = skills.split(",").map(skill => skill.trim())
         }
-
-        //resume here 
-        if(cloudResponse){
-            user.profile.resume = cloudResponse.secure_url;
-            user.profile.resumeOriginalName = file.originalname;
-        }
-
 
         await user.save()
 
