@@ -1,24 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { JOB_API_END_POINT } from "@/utils/constant";
+import axios from "axios";
+import { setSingleJob } from "@/redux/jobSlice";
 
 const JobDescription = () => {
   const isApplied = true;
+  const params = useParams();
+  const jobId = params.id;
+  const dispatch = useDispatch();
+  const { singleJob } = useSelector(store => store.job);
+  const { user } = useSelector(store => store.auth);
+
+  useEffect(() => {
+    const fetchSingleJob = async() => {
+        try {
+            const res = await axios.get(`${JOB_API_END_POINT}/${jobId}`, {withCredentials: true});
+
+            if(res.data.success){
+                dispatch(setSingleJob(res.data.job))
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    fetchSingleJob();
+  }, [jobId, dispatch, user?._id])
 
   return (
     <div className="max-w-7xl mx-auto my-10">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-bold text-xl">Frontend Developer</h1>
+          <h1 className="font-bold text-xl">{singleJob?.title}</h1>
           <div className="flex items-center gap-2 mt-4">
             <Badge className={"text-blue-700 font-bold"} variant="outline">
-              12 Positions
+              {singleJob?.position} Positions
             </Badge>
             <Badge className={"text-red-700 font-bold"} variant="outline">
-              Full Time
+              {singleJob?.jobType}
             </Badge>
             <Badge className={"text-purple-700 font-bold"} variant="outline">
-              12LPA
+              {singleJob?.salary} LPA
             </Badge>
           </div>
         </div>
@@ -42,41 +67,41 @@ const JobDescription = () => {
         <h1 className="font-bold my-1">
           Role:{" "}
           <span className="pl-4 font-normal text-gray-800">
-            Frontent Developer
+            {singleJob?.title}
           </span>
         </h1>
         <h1 className="font-bold my-1">
           Location:{" "}
-          <span className="pl-4 font-normal text-gray-800">Mumbai</span>
+          <span className="pl-4 font-normal text-gray-800">{singleJob?.location}</span>
         </h1>
         <h1 className="font-bold my-1">
           Description:{" "}
           <span className="pl-4 font-normal text-gray-800">
-            Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet.
+          {singleJob?.description}
           </span>
         </h1>
         <h1 className="font-bold my-1">
           Experience:{" "}
           <span className="pl-4 font-normal text-gray-800">
-            3+ years
+            {singleJob?.experienceLevel} years
           </span>
         </h1>
         <h1 className="font-bold my-1">
           Salary:{" "}
           <span className="pl-4 font-normal text-gray-800">
-            12LPA
+            {singleJob?.salary} LPA
           </span>
         </h1>
         <h1 className="font-bold my-1">
           Total Applicants:{" "}
           <span className="pl-4 font-normal text-gray-800">
-            50
+            {singleJob?.applications?.length}
           </span>
         </h1>
         <h1 className="font-bold my-1">
           Posted Date:{" "}
           <span className="pl-4 font-normal text-gray-800">
-            03-10-2026
+            {singleJob?.createdAt.split("T")[0]}
           </span>
         </h1>
       </div>
